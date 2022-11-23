@@ -4,6 +4,7 @@ import {
  signIn,
  getUsers,
  getUser,
+ updateUser,
 } from '../controllers/users.controllers.js';
 import { verifyToken } from '../middlewares/verifyToken.js';
 
@@ -17,6 +18,8 @@ router.get('/users', verifyToken, getUsers);
 
 router.get('/user/:id', verifyToken, getUser);
 //modificar un usuario
+
+router.patch('/user/:id', updateUser);
 
 //eliminar un usuario
 

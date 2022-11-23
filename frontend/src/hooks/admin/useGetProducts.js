@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext } from 'react';
-import { TYPES } from '../actions/cartActions';
-import CartContext from '../context/CartContext';
+import { TYPES } from '../../actions/cartActions';
+import CartContext from '../../context/CartContext';
 
 const url = import.meta.env.VITE_API_URL;
 

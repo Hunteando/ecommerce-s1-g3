@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 import { TYPES } from '../actions/cartActions';
 import CartContext from '../context/CartContext';
-CartContext;
+import { useNavigate } from 'react-router-dom';
+
 export function Cart() {
  const { dispatch, state } = useContext(CartContext);
  const { cart } = state;
+ const navigate = useNavigate();
 
  const addToCart = (id) => {
   dispatch({ type: TYPES.ADD_TO_CART, payload: id });
@@ -34,14 +36,17 @@ export function Cart() {
     <h3>Carrito</h3>
    </div>
    <article className='box'>
-    <button
-     /*   onClick={() => {
-      clearCart();
-      swal('Carrito vaciado', '', 'success');
-     }} */
-     onClick={() => clearCart()}>
-     Limpiar Carrito
-    </button>
+    {cart.length > 0 && (
+     <button
+      /*   onClick={() => {
+    clearCart();
+    swal('Carrito vaciado', '', 'success');
+   }} */
+      onClick={() => clearCart()}>
+      Limpiar Carrito
+     </button>
+    )}
+
     {cart.length > 0
      ? cart.map((product) => (
         <div className='cardCart' key={product.id_product}>
@@ -80,6 +85,14 @@ export function Cart() {
      {cart.reduce((acc, item) => acc + item.product_price * item.quantity, 0)}
      .00
     </h3>
+    {cart.length > 0 && (
+     <button
+      onClick={() => {
+       navigate('/checkout');
+      }}>
+      Proceder al pago
+     </button>
+    )}
    </article>
   </>
  );

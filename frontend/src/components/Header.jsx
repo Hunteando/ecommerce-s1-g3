@@ -5,27 +5,32 @@ import '../App.css';
 import { VscAccount } from 'react-icons/vsc';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { TYPES } from '../actions/cartActions';
 import CartContext from '../context/CartContext';
+import UserContext from '../context/UserContext';
+import ModalContext from '../context/ModalContext';
 
-export const Header = ({ setModal, setAnimarModal, user, setUser }) => {
+export const Header = () => {
+ const { user, setUser } = useContext(UserContext);
+ const { setModalIsVisible } = useContext(ModalContext);
  const { state, dispatch } = useContext(CartContext);
+
  const { cart } = state;
 
  const navigate = useNavigate();
 
  const onHandleModal = () => {
-  setModal(true);
-  setTimeout(() => {
-   setAnimarModal(true);
-  }, 500);
+  setModalIsVisible(true);
  };
 
  const logOut = () => {
   setUser(null);
   window.localStorage.removeItem('loggedAppUser');
+  window.localStorage.removeItem('userProfile');
+
   dispatch({ type: TYPES.CLEAR_CART });
+  navigate('/');
  };
 
  return (

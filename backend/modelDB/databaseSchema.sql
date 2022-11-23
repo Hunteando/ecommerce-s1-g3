@@ -13,16 +13,13 @@ CREATE TABLE UsersDetails(
   lastname VARCHAR(32) NOT NULL,
   secondlastname VARCHAR(32) NULL,
   document_number INT(10) NOT NULL,
-  id_user INT NOT NULL,
+  id_user INT NOT NULL UNIQUE,
   FOREIGN KEY (id_user) REFERENCES Users(id_user)
 );
 
 CREATE TABLE DocumentType(
   id_document_type INT PRIMARY KEY AUTO_INCREMENT,
   name_document_type ENUM('dni', 'pasaporte' ) NOT NULL,
-  secondname VARCHAR(32) NULL,
-  lastname VARCHAR(32) NOT NULL,
-  secondlastname VARCHAR(32) NULL,
   document_number INT(10) NOT NULL,
   id_user INT NOT NULL,
   FOREIGN KEY (id_user) REFERENCES Users(id_user)
@@ -30,7 +27,7 @@ CREATE TABLE DocumentType(
 
 CREATE TABLE Phone(
   id_phone INT PRIMARY KEY AUTO_INCREMENT,
-  phone_number TINYINT(13) NOT NULL,
+  phone_number bigint(15) NOT NULL,
   id_user INT NOT NULL,
   FOREIGN KEY (id_user) REFERENCES Users(id_user)
 );

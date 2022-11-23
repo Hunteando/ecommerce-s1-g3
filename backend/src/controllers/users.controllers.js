@@ -41,12 +41,12 @@ export const signIn = async (req, res) => {
    const { id_user, username, email, roles } = rows[0];
 
    if (comparePasswords(user, password)) {
-    const token = jwt.sign({ id_user, username, email, roles }, JWTSECRET, {
-     expiresIn: expireTime,
-    });
+    const token = jwt.sign({ id_user, username, email, roles }, JWTSECRET);
 
     res.status(200).json({
+     id_user,
      token,
+     email,
      username,
      roles,
     });
@@ -94,7 +94,6 @@ export const getUser = async (req, res) => {
   if (error) {
    res.sendStatus(403);
   } else {
-   console.log(authData);
    try {
     const [rows] = await pool.query('SELECT * FROM Users WHERE id_user = ?', [
      userId,
@@ -116,4 +115,32 @@ export const getUser = async (req, res) => {
    }
   }
  });
+};
+
+export const updateUser = async (req, res) => {
+ const { id } = req.params;
+ const { username, email, password, roles } = req.body;
+
+ try {
+  const [result] = await pool.query(
+   'UPDATE Users SET username = IFNULL(?, username),email = IFNULL(?, email),password = IFNULL(?, password),roles = IFNULL(?, roles) WHERE id_user = ?',
+   [username, email, password, roles, id]
+  );
+
+  if (result.affectedRows === 0) {
+   return res.status(404).json({
+    message: 'User not found',
+   });
+  }
+
+  const [rows] = await pool.query('SELECT * FROM Users WHERE id_user = ?', [
+   id,
+  ]);
+
+  res.json(rows[0]);
+ } catch (error) {
+  return res.status(500).json({
+   message: 'Something goes wrong',
+  });
+ }
 };

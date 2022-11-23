@@ -5,4 +5,6 @@ export * from './Privacy';
 export * from './Register';
 export * from './Work';
 export * from './Cart';
+export * from './Profile';
+export * from './Checkout';
 //export * from './UserEdit'

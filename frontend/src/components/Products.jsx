@@ -2,16 +2,14 @@ import { useContext } from 'react';
 import { TYPES } from '../actions/cartActions';
 import CartContext from '../context/CartContext';
 import swal from 'sweetalert';
-import { Loader } from './Loader';
 import { useNavigate } from 'react-router-dom';
 
-export const loader = ({params})=>{
-  console.log(params)
-}
+export const loader = ({ params }) => {
+ console.log(params);
+};
 
 export const Products = () => {
-
-  const navigate = useNavigate()
+ const navigate = useNavigate();
  const { dispatch, state } = useContext(CartContext);
  const { products } = state;
 
@@ -28,6 +26,7 @@ export const Products = () => {
 
  return (
   <div className='container__products'>
+
    {products
     ? products.map((product) => {
        return (

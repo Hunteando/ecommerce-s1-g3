@@ -25,9 +25,14 @@ import {
  //UserEdit,
  //action as NewUser,
  //loader as EditUserLoader,
+ Checkout,
  Cart,
+ Profile,
  //actionUser as EditarUsuarioAction,
 } from './pages/';
+import { ModalProvider } from './context/ModalContext';
+import { UserProvider } from './context/UserContext';
+import { UserProfileProvider } from './context/UserProfileContext';
 
 const router = createBrowserRouter([
  {
@@ -38,7 +43,10 @@ const router = createBrowserRouter([
     index: true,
     element: <Products />,
    },
-
+   {
+    path: '/checkout',
+    element: <Checkout />,
+   },
    {
     path: '/about',
     element: <About />,
@@ -62,6 +70,10 @@ const router = createBrowserRouter([
    {
     path: '/cart',
     element: <Cart />,
+   },
+   {
+    path: '/profile',
+    element: <Profile />,
    },
    /*    {
     path: '/register',
@@ -93,9 +105,9 @@ const router = createBrowserRouter([
  },
  {
   path: '/productdetail/:productId/',
-  element: <ProductDetail  />,
-  loader: detailProductLoader
- }
+  element: <ProductDetail />,
+  loader: detailProductLoader,
+ },
  /*  {
   path: '/admin/user/:userId/edit',
   element: <UserEdit />,
@@ -107,8 +119,14 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
  <React.StrictMode>
-  <CartProvider>
-   <RouterProvider router={router} />
-  </CartProvider>
+  <UserProvider>
+   <UserProfileProvider>
+    <CartProvider>
+     <ModalProvider>
+      <RouterProvider router={router} />
+     </ModalProvider>
+    </CartProvider>
+   </UserProfileProvider>
+  </UserProvider>
  </React.StrictMode>
 );

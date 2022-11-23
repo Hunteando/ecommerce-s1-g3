@@ -1,17 +1,18 @@
+import { useContext } from 'react';
 import cerrarBTN from '../assets/icons/cerrar.svg';
-import { useLoginForm } from '../hooks/useLoginForm';
+import ModalContext from '../context/ModalContext';
+import UserContext from '../context/UserContext';
+import { useLoginForm } from '../hooks/login/useLoginForm';
 import { Loader } from './Loader';
+import { Input } from './login/Input';
+import { useNavigate } from 'react-router-dom';
 
-import { Input } from "./login/Input";
+export const Modal = ({ noLogged }) => {
+ const { setModalIsVisible } = useContext(ModalContext);
+ const { setUser } = useContext(UserContext);
 
-export const Modal = ({ setModal, animarModal, setAnimarModal, setUser }) => {
- const onHandle = () => {
-  setAnimarModal(false);
+ const navigate = useNavigate();
 
-  setTimeout(() => {
-   setModal(false);
-  }, 500);
- };
  const {
   form,
   errors,
@@ -20,7 +21,16 @@ export const Modal = ({ setModal, animarModal, setAnimarModal, setUser }) => {
   handleSubmit,
   loading,
   responseMessage,
- } = useLoginForm(setModal, setUser);
+ } = useLoginForm(setModalIsVisible, setUser);
+
+ const onHandle = () => {
+  setModalIsVisible(false);
+
+  if (window.location.pathname === '/checkout') {
+   setModalIsVisible(false);
+   return navigate('/cart');
+  }
+ };
 
  return (
   <div className='modal'>
@@ -29,7 +39,7 @@ export const Modal = ({ setModal, animarModal, setAnimarModal, setUser }) => {
    </div>
    <form onSubmit={handleSubmit} className='modal__container'>
     <h3 className='login__title'>Iniciar Sesión</h3>
-
+    {noLogged && <h4>Necesitas iniciar sesion para proceder con la compra</h4>}
     <Input
      name='email'
      className='input__login'

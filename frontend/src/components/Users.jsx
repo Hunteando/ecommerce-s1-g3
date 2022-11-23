@@ -1,4 +1,4 @@
-import { useGetUsers } from '../hooks/useGetUsers';
+import { useGetUsers } from '../hooks/admin/useGetUsers';
 import { User } from './User';
 
 //Para ejecutar una funcion antes de renderizar

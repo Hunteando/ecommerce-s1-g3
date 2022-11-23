@@ -1,66 +1,24 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { validateForm } from './validateForm';
+import { fetchUserData } from './fetchData';
+import UserProfileContext from '../../context/UserProfileContext';
 
 const initialForm = {
  email: '',
  password: '',
 };
 
-export const useLoginForm = (setModal, setUser) => {
+export const useLoginForm = (setModalIsVisible, setUser) => {
  const [form, setForm] = useState(initialForm);
  const [errors, setErrors] = useState({});
  const [loading, setLoading] = useState(false);
  const [responseMessage, setResponseMessage] = useState(false);
 
+ const { setUserProfile } = useContext(UserProfileContext);
+
  const navigate = useNavigate();
-
- const validateForm = (form, target) => {
-  let errors = {};
-  const regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
-  const regexPassword = /^.{6,12}$/; // 6 to 12 digits
-
-  const emailValidation = () => {
-   if (!form.email.trim()) {
-    errors.email = 'El correo electrónico no puede estar vacío';
-   } else if (!regexEmail.test(form.email.trim())) {
-    errors.email = 'Parece que esto no es un correo electrónico.';
-   } else {
-    errors.email = true;
-   }
-  };
-
-  const passwordValidation = () => {
-   if (!form.password.trim()) {
-    errors.password = 'La contraseña no puede estar vacía';
-   } else if (!regexPassword.test(form.password.trim())) {
-    errors.password = 'La contraseña debe contener mínimo 6 dígitos, máximo 12';
-   } else {
-    errors.password = true;
-   }
-  };
-
-  const validateAll = () => {
-   emailValidation();
-   passwordValidation();
-  };
-
-  const selectValidation = (target) => {
-   const validations = {
-    email: emailValidation,
-    password: passwordValidation,
-    undefined: validateAll,
-   };
-
-   const select = validations[target];
-
-   return select();
-  };
-
-  selectValidation(target);
-
-  return errors;
- };
 
  const handleChange = (e) => {
   const { name, value } = e.target;
@@ -95,18 +53,31 @@ export const useLoginForm = (setModal, setUser) => {
     });
 
     const response = request.data;
-    console.log(request.data);
+    const id = response.id_user;
+
+    setUserProfile(await fetchUserData(id));
+
     if (request.data.roles === 'admin') {
      window.localStorage.setItem('loggedAppUser', JSON.stringify(response));
-     setModal(false);
-     return navigate('/Admin');
+     setModalIsVisible(false);
+     navigate('/Admin');
+     return setLoading(false);
+    }
+
+    if (window.location.pathname) {
+     setModalIsVisible(false);
+     setUser(response.username);
+     window.localStorage.setItem('loggedAppUser', JSON.stringify(response));
+     return setLoading(false);
     }
 
     navigate('/');
-    setModal(false);
+    setModalIsVisible(false);
     setUser(response.username);
     window.localStorage.setItem('loggedAppUser', JSON.stringify(response));
+    return setLoading(false);
    } catch (error) {
+    console.log(error);
     console.log(error.code);
     setLoading(false);
 

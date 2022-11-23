@@ -5,6 +5,7 @@ import { validateForm } from './validateForm';
 import { fetchUserData } from './fetchData';
 import UserProfileContext from '../../context/UserProfileContext';
 
+const url = import.meta.env.VITE_API_URL;
 const initialForm = {
  email: '',
  password: '',
@@ -47,7 +48,7 @@ export const useLoginForm = (setModalIsVisible, setUser) => {
    setLoading(true);
 
    try {
-    const request = await axios.post(`http://localhost:5825/api/SignIn`, {
+    const request = await axios.post(`${url}/api/SignIn`, {
      email: form.email,
      password: form.password,
     });

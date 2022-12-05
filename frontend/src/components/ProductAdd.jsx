@@ -17,7 +17,7 @@ export const ProductAdd = () => {
 
  return (
   <>
-   <h3 className='title__admin'>Administración de Productos</h3>
+   <h3 className='title__admin'>Administración de productos</h3>
    {products.length ? (
     <table className='container__users'>
      <thead className='table__users'>

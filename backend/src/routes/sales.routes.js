@@ -4,6 +4,7 @@ import {
  createSale,
  // updateSale,
  getSale,
+ getUserSales,
 } from '../controllers/sale.controllers.js';
 
 const router = Router();
@@ -11,6 +12,8 @@ const router = Router();
 router.get('/sales', getSales);
 
 router.post('/sale/:id', createSale);
+
+router.get('/sale/:id', getUserSales);
 
 router.get('/sale/:id/:saleid', getSale);
 

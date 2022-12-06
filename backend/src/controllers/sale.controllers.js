@@ -64,3 +64,30 @@ export const getSale = async (req, res) => {
   });
  }
 };
+
+export const getUserSales = async (req, res) => {
+ const { id } = req.params;
+
+ try {
+  const [result] = await pool.query('SELECT * FROM sales WHERE id_user = ?', [
+   id,
+  ]);
+
+  const [rows] = await pool.query(
+   'SELECT * FROM sales INNER JOIN sales_details ON sales_details.id_sale = sales.id_sale INNER JOIN products ON sales_details.id_product = products.id_product WHERE id_user = ?',
+   [id]
+  );
+
+  if (rows.length <= 0)
+   return res.status(404).json({
+    message: 'user not found',
+   });
+
+  res.json({ sales: result, products: rows });
+ } catch (error) {
+  console.error(error);
+  return res.status(500).json({
+   message: 'Something goes wrong',
+  });
+ }
+};

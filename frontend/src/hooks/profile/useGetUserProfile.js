@@ -1,12 +1,5 @@
-import axios from 'axios';
-import {
- completeProfile,
- handleInputValue,
- selectEndpoint,
- handleValue,
- selectHTTPMethod,
- handleState,
-} from './helpers';
+import { completeProfile, openModal } from './helpers';
+import { handleSubmit } from './handleSubmit';
 import {
  getUserAccData,
  getUserNames,
@@ -17,31 +10,15 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import UserProfileContext from '../../context/UserProfileContext';
 
-const url = import.meta.env.VITE_API_URL;
+export const useGetUserProfile = () => {
+ const [inputModal, seTinputModal] = useState('');
+ const [secondInputModal, setSecondInputModal] = useState('');
+ const [title, setTitle] = useState('');
+ const [prevValue, setPrevValue] = useState(false);
+ const [isOpen, setIsOpen] = useState(false);
 
-export const useGetUserProfile = (setIsOpen) => {
  const { UserProfile, setUserProfile, setLoading } =
   useContext(UserProfileContext);
-
- const handleSubmit = async (id, title, prevValue, value, secondValue) => {
-  try {
-   const request = await axios[selectHTTPMethod(prevValue)](
-    `${url}/api/${selectEndpoint(title)}/${id}`,
-    handleValue(title, value, secondValue)
-   );
-   console.log(request.status);
-   if (request.status) {
-    setUserProfile(handleState(UserProfile, title, value, secondValue));
-    window.localStorage.setItem(
-     'userProfile',
-     JSON.stringify(handleState(UserProfile, title, value, secondValue))
-    );
-    setIsOpen(false);
-   }
-  } catch (error) {
-   console.error(error);
-  }
- };
 
  useEffect(() => {
   const getUser = window.localStorage.getItem('loggedAppUser');
@@ -51,15 +28,10 @@ export const useGetUserProfile = (setIsOpen) => {
    const fetchUserData = async (id_user) => {
     try {
      const userData = await getUserAccData(id_user);
-
      const userNames = await getUserNames(id_user);
-
      const userDocument = await getUserDocument(id_user);
-
      const userPhone = await getUserPhone(id_user);
-
      const userAddress = await getUserAddress(id_user);
-
      const profile = {
       ...UserProfile,
       id_user,
@@ -79,18 +51,26 @@ export const useGetUserProfile = (setIsOpen) => {
      setLoading(false);
     } catch (error) {
      setLoading(false);
-
      console.error(error);
     }
    };
-
    fetchUserData(id_user);
   }
  }, []);
 
  return {
   completeProfile,
-  handleInputValue,
   handleSubmit,
+  openModal,
+  prevValue,
+  setPrevValue,
+  isOpen,
+  setIsOpen,
+  title,
+  setTitle,
+  inputModal,
+  seTinputModal,
+  secondInputModal,
+  setSecondInputModal,
  };
 };

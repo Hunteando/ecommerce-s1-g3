@@ -1,9 +1,10 @@
 import { useGetUserProfile } from '../hooks/profile/useGetUserProfile';
 import { Modal } from '../components/profile/Modal';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import UserProfileContext from '../context/UserProfileContext';
+import { Loader } from '../components/Loader';
 
 const SECTION_STYLES = {
  display: 'flex',
@@ -14,18 +15,26 @@ const SECTION_STYLES = {
 };
 
 export const Profile = () => {
- const [isOpen, setIsOpen] = useState(false);
- const [title, setTitle] = useState('');
- const [inputModal, seTinputModal] = useState('');
- const [secondInputModal, setSecondInputModal] = useState('');
- const [prevValue, setPrevValue] = useState(false);
-
- const { UserProfile, loading } = useContext(UserProfileContext);
+ const { UserProfile, setUserProfile, loading } =
+  useContext(UserProfileContext);
 
  const navigate = useNavigate();
 
- const { completeProfile, handleInputValue, handleSubmit } =
-  useGetUserProfile(setIsOpen);
+ const {
+  completeProfile,
+  handleSubmit,
+  openModal,
+  prevValue,
+  setPrevValue,
+  setIsOpen,
+  isOpen,
+  title,
+  setTitle,
+  inputModal,
+  seTinputModal,
+  secondInputModal,
+  setSecondInputModal,
+ } = useGetUserProfile();
 
  const {
   id_user,
@@ -38,59 +47,28 @@ export const Profile = () => {
   address,
  } = UserProfile;
 
- const handlePrevValue = (name, value) => {
-  if (name === 'Nombre y apellido') {
-   return setPrevValue(
-    handleInputValue(name, UserProfile).firstName ||
-     handleInputValue(name, UserProfile).lastName
-     ? true
-     : false
-   );
-  }
-
-  if (name === 'Documento') {
-   return setPrevValue(
-    handleInputValue(name, UserProfile).document ||
-     handleInputValue(name, UserProfile).typeOfDocument
-     ? true
-     : false
-   );
-  }
-
-  return setPrevValue(handleInputValue(name, UserProfile) ? true : false);
- };
-
- const openModal = (e) => {
-  const { name } = e.target;
-
-  handlePrevValue(name);
-
-  if (name === 'Nombre y apellido') {
-   seTinputModal(handleInputValue(name, UserProfile).firstName);
-   setSecondInputModal(handleInputValue(name, UserProfile).lastName);
-   setIsOpen(true);
-   return setTitle(name);
-  }
-
-  if (name === 'Documento') {
-   seTinputModal(handleInputValue(name, UserProfile).typeOfDocument);
-   setSecondInputModal(handleInputValue(name, UserProfile).document);
-   setIsOpen(true);
-   return setTitle(name);
-  }
-  seTinputModal(handleInputValue(name, UserProfile));
-  setIsOpen(true);
-  setTitle(name);
+ const handleClick = (e) => {
+  openModal(
+   e,
+   UserProfile,
+   setPrevValue,
+   seTinputModal,
+   setIsOpen,
+   setTitle,
+   setSecondInputModal
+  );
  };
 
  return (
   <>
    {loading ? (
-    <h1>cargando...</h1>
+    <Loader />
    ) : (
     <>
      <Modal
       id={id_user}
+      setUserProfile={setUserProfile}
+      UserProfile={UserProfile}
       prevValue={prevValue}
       handleSubmit={handleSubmit}
       seTinputModal={seTinputModal}
@@ -99,9 +77,9 @@ export const Profile = () => {
       setSecondInputModal={setSecondInputModal}
       title={title}
       open={isOpen}
+      setIsOpen={setIsOpen}
       OnClose={() => setIsOpen(false)}
      />
-
      {completeProfile(UserProfile) ? (
       <button onClick={() => navigate('/checkout')}>seguir comprando</button>
      ) : (
@@ -114,11 +92,11 @@ export const Profile = () => {
        <p>Nombre de usuario:</p>
        <p>{userName}</p>
        {userName ? (
-        <button name='Nombre de Usuario' onClick={(e) => openModal(e)}>
+        <button name='Nombre de Usuario' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
-        <button name='Nombre de Usuario' onClick={(e) => openModal(e)}>
+        <button name='Nombre de Usuario' onClick={(e) => handleClick(e)}>
          Agregar
         </button>
        )}
@@ -128,7 +106,7 @@ export const Profile = () => {
        <p>email:</p>
        <p>{email}</p>
        {email ? (
-        <button name='Email' onClick={(e) => openModal(e)}>
+        <button name='Email' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
@@ -143,11 +121,11 @@ export const Profile = () => {
        <p>{firstName}</p>
        <p>{lastName}</p>
        {firstName || lastName ? (
-        <button name='Nombre y apellido' onClick={(e) => openModal(e)}>
+        <button name='Nombre y apellido' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
-        <button name='Nombre y apellido' onClick={(e) => openModal(e)}>
+        <button name='Nombre y apellido' onClick={(e) => handleClick(e)}>
          Agregar
         </button>
        )}
@@ -156,11 +134,11 @@ export const Profile = () => {
        <p>Documento</p>
        <p>{document}</p>
        {document ? (
-        <button name='Documento' onClick={(e) => openModal(e)}>
+        <button name='Documento' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
-        <button name='Documento' onClick={(e) => openModal(e)}>
+        <button name='Documento' onClick={(e) => handleClick(e)}>
          Agregar
         </button>
        )}
@@ -169,11 +147,11 @@ export const Profile = () => {
        <p>Telefono</p>
        <p>{phone}</p>
        {phone ? (
-        <button name='Teléfono' onClick={(e) => openModal(e)}>
+        <button name='Teléfono' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
-        <button name='Teléfono' onClick={(e) => openModal(e)}>
+        <button name='Teléfono' onClick={(e) => handleClick(e)}>
          Agregar
         </button>
        )}
@@ -182,11 +160,11 @@ export const Profile = () => {
        <p>dirección</p>
        <p>{address}</p>
        {address ? (
-        <button name='Dirección' onClick={(e) => openModal(e)}>
+        <button name='Dirección' onClick={(e) => handleClick(e)}>
          Editar
         </button>
        ) : (
-        <button name='Dirección' onClick={(e) => openModal(e)}>
+        <button name='Dirección' onClick={(e) => handleClick(e)}>
          Agregar
         </button>
        )}

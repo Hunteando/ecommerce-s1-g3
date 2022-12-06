@@ -20,6 +20,8 @@ const OVERLAY_STYLES = {
 
 export const Modal = ({
  id,
+ setUserProfile,
+ UserProfile,
  prevValue,
  handleSubmit,
  seTinputModal,
@@ -28,6 +30,7 @@ export const Modal = ({
  setSecondInputModal,
  title,
  open,
+ setIsOpen,
  OnClose,
 }) => {
  const handleChange = (e, inputName) => {
@@ -101,7 +104,6 @@ export const Modal = ({
        name='input'
        placeholder='escriba aqui'
        onChange={(e) => handleChange(e, 'documentNumber')}
-       //necesito solo leer second
        value={secondInputModal}
       />
      </>
@@ -120,7 +122,16 @@ export const Modal = ({
 
     <button
      onClick={() =>
-      handleSubmit(id, title, prevValue, inputModal, secondInputModal)
+      handleSubmit(
+       id,
+       title,
+       prevValue,
+       inputModal,
+       secondInputModal,
+       UserProfile,
+       setUserProfile,
+       setIsOpen
+      )
      }>
      enviar
     </button>

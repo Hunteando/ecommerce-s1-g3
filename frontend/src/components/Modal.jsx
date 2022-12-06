@@ -70,7 +70,8 @@ export const Modal = ({ noLogged }) => {
     )}
 
     <p>
-     <strong>¿No tienes una cuenta?</strong> <a href='/register'>Regístrate</a>
+     <strong>¿No tienes una cuenta?</strong>{' '}
+     <p onClick={() => navigate('/register')}>Regístrate</p>
     </p>
    </form>
   </div>

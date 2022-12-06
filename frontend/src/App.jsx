@@ -15,7 +15,7 @@ export const App = () => {
  }, []);
 
  return (
-  <div className={modalIsVisible ? 'fijar' : ''}>
+  <div className={`${modalIsVisible ? 'fijar' : ''} mainContainer`}>
    <Header />
    <Outlet />
    <Footer />

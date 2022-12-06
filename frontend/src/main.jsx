@@ -34,6 +34,7 @@ import {
 } from './pages/';
 import { Payment } from './pages/Payment';
 import OrderSummary from './pages/OrderSummary';
+import UserSales from './pages/UserSales';
 
 const router = createBrowserRouter([
  {
@@ -44,8 +45,14 @@ const router = createBrowserRouter([
     index: true,
     element: <Products />,
    },
-   { path: '/payment', element: <Payment /> },
-   { path: '/ordersummary', element: <OrderSummary /> },
+   {
+    path: '/payment',
+    element: <Payment />,
+   },
+   {
+    path: '/ordersummary',
+    element: <OrderSummary />,
+   },
    {
     path: '/checkout',
     element: <Checkout />,
@@ -77,6 +84,10 @@ const router = createBrowserRouter([
    {
     path: '/profile',
     element: <Profile />,
+   },
+   {
+    path: '/mypurchases',
+    element: <UserSales />,
    },
    {
     path: '/register',

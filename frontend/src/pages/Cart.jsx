@@ -48,14 +48,13 @@ export function Cart() {
          <div>
           <img className='cardCartImg' src={product.product_image_url} />
          </div>
-         <p className='card__title'>{product.product_name}</p>
-         <button
-          onClick={() => {
-           delFromCart(product.id_product, true);
-           swal('Producto eliminado del carrito', '', 'success');
-          }}>
-          eliminar producto
-         </button>
+         <div className='cart-nameAndPrice'>
+         <div>
+         <h2 className='cart-title'>{product.product_name}</h2></div>
+         <div className='cardCartPrice'>
+          <p className='cart-price'>{formateado(product.product_price)}</p>
+         </div>
+         </div>
          <div className='cardCartMoreOrLess'>
           <button
            className='buttonMoreOrLess'
@@ -69,8 +68,13 @@ export function Cart() {
            +
           </button>
          </div>
-         <div className='cardCartPrice'>
-          <p className='card__price'>{formateado(product.product_price)}</p>
+         <div>
+         <button className='cart-button-eliminarProducto'
+          onClick={() => {
+           delFromCart(product.id_product, true);
+           swal('Producto eliminado del carrito', '', 'success');
+          }}>
+         </button>
          </div>
         </div>
        ))

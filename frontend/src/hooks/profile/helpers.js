@@ -117,3 +117,56 @@ export const handleState = (user, title, value, secondValue) => {
 
  return selections[title];
 };
+
+export const handlePrevValue = (name, UserProfile, setPrevValue) => {
+ if (name === 'Nombre y apellido') {
+  return setPrevValue(
+   handleInputValue(name, UserProfile).firstName ||
+    handleInputValue(name, UserProfile).lastName
+    ? true
+    : false
+  );
+ }
+
+ if (name === 'Documento') {
+  return setPrevValue(
+   handleInputValue(name, UserProfile).document ||
+    handleInputValue(name, UserProfile).typeOfDocument
+    ? true
+    : false
+  );
+ }
+
+ return setPrevValue(handleInputValue(name, UserProfile) ? true : false);
+};
+
+export const openModal = (
+ e,
+ UserProfile,
+ setPrevValue,
+ seTinputModal,
+ setIsOpen,
+ setTitle,
+ setSecondInputModal
+) => {
+ const { name } = e.target;
+
+ handlePrevValue(name, UserProfile, setPrevValue);
+
+ if (name === 'Nombre y apellido') {
+  seTinputModal(handleInputValue(name, UserProfile).firstName);
+  setSecondInputModal(handleInputValue(name, UserProfile).lastName);
+  setIsOpen(true);
+  return setTitle(name);
+ }
+
+ if (name === 'Documento') {
+  seTinputModal(handleInputValue(name, UserProfile).typeOfDocument);
+  setSecondInputModal(handleInputValue(name, UserProfile).document);
+  setIsOpen(true);
+  return setTitle(name);
+ }
+ seTinputModal(handleInputValue(name, UserProfile));
+ setIsOpen(true);
+ setTitle(name);
+};

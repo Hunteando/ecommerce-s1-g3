@@ -1,0 +1,56 @@
+{
+  "users": [
+    {
+      "username": "morena5",
+      "email": "susana@gmail.com",
+      "password": "123456",
+      "password2": "123456",
+      "roles": "user",
+      "id": 9
+    },
+    {
+      "username": "Pablo",
+      "email": "roberto@gmail.com",
+      "password": "123456",
+      "password2": "123456",
+      "roles": "user",
+      "id": 10
+    },
+    {
+      "username": "jazmin",
+      "email": "jazmin@gmail.com",
+      "password": "123456",
+      "password2": "123456",
+      "roles": "user",
+      "id": 11
+    },
+    {
+      "username": "robertiño",
+      "email": "robertada@gmail.com",
+      "password": "23456",
+      "password2": "23456",
+      "roles": "user",
+      "id": 12
+    }
+  ],
+  "products": [
+    {
+      "imagen": "/images/lampara.jpeg",
+      "name": "Lamapara XYZ",
+      "price": 18,
+      "id": 1
+    },
+    {
+      "imagen": "/images/lampara2.jpeg",
+      "name": "Lampara ABC",
+      "price": 28,
+      "id": 2
+    },
+    {
+      "imagen": "/images/lampara3.jpeg",
+      "name": "Lampara CDE",
+      "price": 15,
+      "id": 3
+    }
+  ]
+}
